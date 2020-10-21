@@ -13,6 +13,7 @@ proc createCrcTable(): array[0..255, TCrc32] =
 const crc32table = createCrcTable()
 
 proc crc32c*(s: seq[byte]): TCrc32 =
+  ## Calculates the CRC32C for the byte sequence.
   result = InitCrc32
   for c in s:
     var tableIndex = (result xor c) and 0xff
