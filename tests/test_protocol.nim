@@ -14,53 +14,53 @@ suite "protocol/types/base":
 suite "protocol/types/numbers":
   test "should convert int8 to a byte sequence":
     check Int[Int8](value: 0).encode == @[byte(0)]
-    check Int[Int8](value: 127).encode == @[byte(127)]
+    check Int[Int8](value: high(int8)).encode == @[byte(127)]
 
   test "should convert negative int8 to a byte sequence":
-    check Int[Int8](value: -128).encode == @[byte(128)]
+    check Int[Int8](value: low(int8)).encode == @[byte(128)]
     check Int[Int8](value: -1).encode == @[byte(255)]
 
   test "should convert int16 to a byte sequence":
     check Int[Int16](value: 0).encode == @[byte(0), byte(0)]
-    check Int[Int16](value: 32767).encode == @[byte(127), byte(255)]
+    check Int[Int16](value: high(int16)).encode == @[byte(127), byte(255)]
 
   test "should convert negative int16 to a byte sequence":
-    check Int[Int16](value: -32768).encode == @[byte(128), byte(0)]
+    check Int[Int16](value: low(int16)).encode == @[byte(128), byte(0)]
     check Int[Int16](value: -1).encode == @[byte(255), byte(255)]
 
   test "should convert int32 to a byte sequence":
     check Int[Int32](value: 0).encode == @[byte(0), byte(0), byte(0), byte(0)]
-    check Int[Int32](value: 2147483647).encode == @[byte(127), byte(255), byte(255), byte(255)]
+    check Int[Int32](value: high(int32)).encode == @[byte(127), byte(255), byte(255), byte(255)]
 
   test "should convert negative int32 to a byte sequence":
-    check Int[Int32](value: int32(-2147483648)).encode == @[byte(128), byte(0), byte(0), byte(0)]
+    check Int[Int32](value: low(int32)).encode == @[byte(128), byte(0), byte(0), byte(0)]
     check Int[Int32](value: -1).encode == @[byte(255), byte(255), byte(255), byte(255)]
 
   test "should convert uint32 to a byte sequence":
     check Int[Uint32](value: 0).encode == @[byte(0), byte(0), byte(0), byte(0)]
-    check Int[Uint32](value: uint32(4294967295)).encode == @[byte(255), byte(255), byte(255), byte(255)]
+    check Int[Uint32](value: high(uint32)).encode == @[byte(255), byte(255), byte(255), byte(255)]
 
   test "should convert int64 to a byte sequence":
     check Int[Int64](value: 0).encode == @[byte(0), byte(0), byte(0), byte(0), byte(0), byte(0), byte(0), byte(0)]
-    check Int[Int64](value: 9223372036854775807).encode == @[byte(127), byte(255), byte(255), byte(255), byte(255), byte(255), byte(255), byte(255)]
+    check Int[Int64](value: high(int64)).encode == @[byte(127), byte(255), byte(255), byte(255), byte(255), byte(255), byte(255), byte(255)]
 
   test "should convert negative int64 to a byte sequence":
-    check Int[Int64](value: -9223372036854775807).encode == @[byte(128), byte(0), byte(0), byte(0), byte(0), byte(0), byte(0), byte(1)]
+    check Int[Int64](value: low(int64)).encode == @[byte(128), byte(0), byte(0), byte(0), byte(0), byte(0), byte(0), byte(0)]
     check Int[Int64](value: -1).encode == @[byte(255), byte(255), byte(255), byte(255), byte(255), byte(255), byte(255), byte(255)]
 
   test "should convert varint to byte sequence for int8 number":
     check Int[VarInt](value: 0).encode == @[byte(0)]
-    check Int[VarInt](value: 127).encode == @[byte(254), byte(1)]
+    check Int[VarInt](value: high(int8)).encode == @[byte(254), byte(1)]
     check Int[VarInt](value: -1).encode == @[byte(1)]
-    check Int[VarInt](value: -128).encode == @[byte(255), byte(1)]
+    check Int[VarInt](value: low(int8)).encode == @[byte(255), byte(1)]
 
   test "should convert varint to byte sequence for int16 number":
-    check Int[VarInt](value: 32767).encode == @[byte(254), byte(255), byte(3)]
-    check Int[VarInt](value: -32768).encode == @[byte(255), byte(255), byte(3)]
+    check Int[VarInt](value: high(int16)).encode == @[byte(254), byte(255), byte(3)]
+    check Int[VarInt](value: low(int16)).encode == @[byte(255), byte(255), byte(3)]
 
   test "should convert varint to byte sequence for int32 number":
-    check Int[VarInt](value: 2147483647).encode == @[byte(254), byte(255), byte(255), byte(255), byte(15)]
-    check Int[VarInt](value: int32(-2147483648)).encode == @[byte(255), byte(255), byte(255), byte(255), byte(15)]
+    check Int[VarInt](value: high(int32)).encode == @[byte(254), byte(255), byte(255), byte(255), byte(15)]
+    check Int[VarInt](value: low(int32)).encode == @[byte(255), byte(255), byte(255), byte(255), byte(15)]
 
 suite "protocol/type/sequences":
   test "should convert bytes to a byte sequence":
