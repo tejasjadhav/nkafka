@@ -3,6 +3,7 @@ import unittest
 import nkafka/protocol/types/base
 import nkafka/protocol/types/numbers
 import nkafka/protocol/types/sequences
+import nkafka/protocol/recordset
 
 suite "protocol/types/base":
   test "should return empty byte sequence for base object":
@@ -86,3 +87,25 @@ suite "protocol/type/sequences":
 
   test "should convert zero length array of numbers to a byte sequence":
     check Array[Int[Int8]](values: @[]).encode == @[byte(0), byte(0), byte(0), byte(0)]
+
+suite "protocol/recordset":
+  test "should convert record to a byte sequence":
+    let record = Record(
+      attributes: Int[Int8](value: 1),
+      timestampDelta: Int[VarInt](value: 1000),
+      offsetDelta: Int[VarInt](value: 1500),
+      key: Sequence[VarIntString](value: "some-key"),
+      value: Sequence[VarIntString](value: "some-value"),
+    )
+
+    check record.encode == @[
+      byte(52), # Record length
+      byte(1), # Attributes
+      byte(208), byte(15), # Timestamp delta
+      byte(184), byte(23), # Offset delta
+      byte(16), # Key length
+      byte(115), byte(111), byte(109), byte(101), byte(45), byte(107), byte(101), byte(121), # Key
+      byte(20), # Value length
+      byte(115), byte(111), byte(109), byte(101), byte(45), byte(118), byte(97), byte(108), byte(117), byte(101), # Value
+      byte(0), # Record headers
+    ]
